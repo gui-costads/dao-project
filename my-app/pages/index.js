@@ -147,8 +147,8 @@ export default function Home() {
         proposalId: id,
         nftTokenId: proposal.nftTokenId.toString(),
         deadline: new Date(parseInt(proposal.deadline.toString()) * 1000),
-        yayVotes: proposal.yayVotes.toString(),
-        nayVotes: proposal.nayVotes.toString(),
+        yesVotes: proposal.yesVotes.toString(),
+        noVotes: proposal.noVotes.toString(),
         executed: proposal.executed,
       };
       return parsedProposal;
@@ -180,7 +180,7 @@ export default function Home() {
       const signer = await getProviderOrSigner(true);
       const daoContract = getDaoContractInstance(signer);
 
-      let vote = _vote === "YAY" ? 0 : 1;
+      let vote = _vote === "YES" ? 0 : 1;
       const txn = await daoContract.voteOnProposal(proposalId, vote);
       setLoading(true);
       await txn.wait();
@@ -341,22 +341,22 @@ export default function Home() {
               <p>Proposal ID: {p.proposalId}</p>
               <p>Fake NFT to Purchase: {p.nftTokenId}</p>
               <p>Deadline: {p.deadline.toLocaleString()}</p>
-              <p>Yay Votes: {p.yayVotes}</p>
-              <p>Nay Votes: {p.nayVotes}</p>
+              <p>yes Votes: {p.yesVotes}</p>
+              <p>no Votes: {p.noVotes}</p>
               <p>Executed?: {p.executed.toString()}</p>
               {p.deadline.getTime() > Date.now() && !p.executed ? (
                 <div className={styles.flex}>
                   <button
                     className={styles.button2}
-                    onClick={() => voteOnProposal(p.proposalId, "YAY")}
+                    onClick={() => voteOnProposal(p.proposalId, "YES")}
                   >
-                    Vote YAY
+                    Vote YES
                   </button>
                   <button
                     className={styles.button2}
-                    onClick={() => voteOnProposal(p.proposalId, "NAY")}
+                    onClick={() => voteOnProposal(p.proposalId, "NO")}
                   >
-                    Vote NAY
+                    Vote NO
                   </button>
                 </div>
               ) : p.deadline.getTime() < Date.now() && !p.executed ? (
@@ -366,7 +366,7 @@ export default function Home() {
                     onClick={() => executeProposal(p.proposalId)}
                   >
                     Execute Proposal{" "}
-                    {p.yayVotes > p.nayVotes ? "(YAY)" : "(NAY)"}
+                    {p.yesVotes > p.noVotes ? "(YES)" : "(NO)"}
                   </button>
                 </div>
               ) : (
