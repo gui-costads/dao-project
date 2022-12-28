@@ -3,7 +3,7 @@
 ### Project to create a DAO Crypto Dev from learWeb3 course.
 
 ```
-https://dao-project-two-opal.vercel.app/
+https://dao-project-seven.vercel.app/
 ```
 ### Adress Contract
 ```
