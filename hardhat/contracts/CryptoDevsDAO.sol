@@ -1,10 +1,9 @@
 // SPX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@oppenzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CryptoDevsDAO is Ownable {
-  interface  IFakeNFTMarketPlace {
+interface IFakeNFTMarketPlace {
     function getPrice() external view returns (uint256);
 
     function available(uint256 _tokenId) external view returns (bool);
@@ -18,6 +17,7 @@ contract CryptoDevsDAO is Ownable {
     function tokenOfOwnerByIndex(address owner, uint256 index) external view returns (uint256);
   }
 
+contract CryptoDevsDAO is Ownable {
   struct Proposal {
     uint256 nftTokenId;
     uint256 deadline;
@@ -57,13 +57,13 @@ contract CryptoDevsDAO is Ownable {
   }
 
   modifier activeProposalOnly(uint256 proposalIndex) {
-    require(proposal[proposalIndex].deadline > block.timestamp, "Deadline exceed");
+    require(proposals[proposalIndex].deadline > block.timestamp, "Deadline exceed");
     _;
   }
 
   enum Vote {
-    Yes,
-    No
+    YES,
+    NO
   }
 
   function voteOnproposal(uint256 proposalIndex, Vote vote) external nftHolderOnly activeProposalOnly(proposalIndex) {
@@ -79,9 +79,9 @@ contract CryptoDevsDAO is Ownable {
         proposal.voters[tokenId] = true;
       }
     }
-    require(numVotes > 0, "Already voted);
+    require(numVotes > 0, "Already voted");
 
-    if(vote == Vote.Yes){
+    if(vote == Vote.YES) {
       proposal.yesVotes += numVotes;
     } else {
       proposal.noVotes += numVotes;
@@ -95,6 +95,8 @@ contract CryptoDevsDAO is Ownable {
   }
 
   function executeProposal(uint256 proposalIndex) external nftHolderOnly inactiveProposalOnly(proposalIndex) {
+    Proposal storage proposal = proposals[proposalIndex];
+
     if(proposal.yesVotes > proposal.noVotes) {
       uint256 nftPrice = nftMarketPlace.getPrice();
       require(address(this).balance >= nftPrice, "Not enough funds");
@@ -103,10 +105,10 @@ contract CryptoDevsDAO is Ownable {
     proposal.executed = true;
   }
 
-  function withdrawEther() external onlyOwner{
+  function withdrawEther() external onlyOwner {
     uint256 amount = address(this).balance;
     require(amount > 0, "Nothing to withdraw, contract balance empty");
-    payable(owner().transfer(amount));
+    payable(owner()).transfer(amount);
   }
 
   receive() external payable{}
