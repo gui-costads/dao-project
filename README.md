@@ -7,5 +7,5 @@ https://dao-project-seven.vercel.app/
 ```
 ### Adress Contract
 ```
-0x6aEa23d45F25939e8d87E9a7A086CcE877272aCA
+0xCC8c792a3749B4f72FcbC2466BB71Fdbbd09E981
 ```
