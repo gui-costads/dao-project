@@ -341,8 +341,8 @@ export default function Home() {
               <p>Proposal ID: {p.proposalId}</p>
               <p>Fake NFT to Purchase: {p.nftTokenId}</p>
               <p>Deadline: {p.deadline.toLocaleString()}</p>
-              <p>yes Votes: {p.yesVotes}</p>
-              <p>no Votes: {p.noVotes}</p>
+              <p>Yes Votes: {p.yesVotes}</p>
+              <p>No Votes: {p.noVotes}</p>
               <p>Executed?: {p.executed.toString()}</p>
               {p.deadline.getTime() > Date.now() && !p.executed ? (
                 <div className={styles.flex}>
@@ -350,13 +350,13 @@ export default function Home() {
                     className={styles.button2}
                     onClick={() => voteOnProposal(p.proposalId, "YES")}
                   >
-                    Vote YES
+                    Vote Yes
                   </button>
                   <button
                     className={styles.button2}
                     onClick={() => voteOnProposal(p.proposalId, "NO")}
                   >
-                    Vote NO
+                    Vote No
                   </button>
                 </div>
               ) : p.deadline.getTime() < Date.now() && !p.executed ? (
